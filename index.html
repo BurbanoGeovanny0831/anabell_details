@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Ti</title>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Nunito:wght@300;400;600&family=Merriweather:wght@300;400;700&display=swap');
+
+    body {
+        margin: 0;
+        padding: 0;
+        background: url('https://i.imgur.com/tWiNmVI.jpeg') no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'Nunito', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        position: relative;
+    }
+
+    /* Velo suave rosado */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 220, 240, 0.35);
+        backdrop-filter: blur(2px);
+        z-index: -1;
+    }
+
+    .card, .card-alt {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(8px);
+        padding: 30px 35px;
+        width: 90%;
+        max-width: 450px;
+        border-radius: 22px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        position: relative;
+        animation: fadeIn 1.2s ease;
+    }
+
+    .photo {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto 15px auto;
+        box-shadow: 0 6px 15px rgba(255, 120, 160, 0.4);
+        border: 4px solid #ffb6d5;
+    }
+
+    h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        text-align: center;
+        margin-bottom: 18px;
+        color: #c74f7b;
+        animation: slideDown 1.2s ease;
+    }
+
+    #mensaje {
+        font-family: 'Merriweather', serif;
+        font-size: 1.02rem;
+        line-height: 1.6;
+        color: #444;
+        white-space: pre-line;
+        min-height: 260px;
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: 600;
+    }
+
+    .yes {
+        background: #ff8fb7;
+        color: white;
+        box-shadow: 0 4px 12px rgba(255, 120, 160, 0.4);
+    }
+
+    .yes:hover {
+        background: #ff77a6;
+    }
+
+    .no {
+        background: #e4d4ff;
+        color: #5a4a7a;
+        box-shadow: 0 4px 12px rgba(150, 120, 255, 0.3);
+    }
+
+    .no:hover {
+        background: #d7c6ff;
+    }
+
+    .card-alt {
+        display: none;
+        text-align: center;
+    }
+
+    .card-alt p {
+        font-family: 'Merriweather', serif;
+        font-size: 1.02rem;
+        line-height: 1.6;
+        white-space: pre-line;
+    }
+</style>
+
+<script>
+    function mostrarMensajeAlternativo() {
+        document.querySelector(".card").style.display = "none";
+        document.querySelector(".card-alt").style.display = "block";
+    }
+
+    // Efecto máquina de escribir
+    document.addEventListener("DOMContentLoaded", function () {
+        const textoCompleto = `No sé en qué momento dejaste de ser solo alguien más,
+y empezaste a ser esa persona que quiero ver todos los días.
+
+Tienes algo…
+no sé si es tu sonrisa, tu forma de mirar,
+o esa tranquilidad que transmites sin intentar.
+
+Pero lo cierto es que llamas la atención sin buscarlo,
+y a mí me tienes pensando más de la cuenta.
+
+No voy a disfrazarlo de amistad bonita,
+porque lo que me pasa contigo va un poco más allá.
+
+Me gusta cómo eres,
+me gusta hablar contigo,
+y sí… también me gustaría descubrir qué pasaría
+si dejo de guardarme lo que siento.
+
+No te escribo esto para presionarte,
+solo para que sepas que alguien te está mirando diferente,
+con interés… con ganas…
+y con la intención clara de acercarse un poco más.`;
+
+        const elemento = document.getElementById("mensaje");
+        let i = 0;
+        const velocidad = 35;
+
+        function escribir() {
+            if (i <= textoCompleto.length) {
+                elemento.textContent = textoCompleto.slice(0, i);
+                i++;
+                setTimeout(escribir, velocidad);
+            }
+        }
+
+        escribir();
+    });
+</script>
+
+</head>
+
+<body>
+
+    <!-- Tarjeta principal -->
+    <div class="card">
+        <img class="photo" src="https://i.imgur.com/7bpxoZu.png">
+
+       <h1>Quería decirte algo…</h1>
+
+        <p id="mensaje"></p>
+
+        <div class="buttons">
+            <!-- Botón SÍ ahora muestra la tarjeta alternativa -->
+            <button class="yes" onclick="mostrarMensajeAlternativo()">Sí</button>
+
+            <!-- Botón NO ahora muestra el mensaje del SÍ -->
+            <button class="no" onclick="alert('Gracias por querer continuar ❤️')">No</button>
+        </div>
+    </div>
+
+    <!-- Tarjeta alternativa -->
+    <div class="card-alt">
+        <h1>Solo quería decirte…</h1>
+        <p>Solo quería que supieras lo mucho que me importas  
+y te quiero confesar mis sentimientos.</p>
+    </div>
+
+</body>
+</html>
