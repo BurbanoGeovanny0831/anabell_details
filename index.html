@@ -6,164 +6,328 @@
 <title>Para Ti</title>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Nunito:wght@300;400;600&family=Merriweather:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+
+    * { box-sizing: border-box; }
 
     body {
         margin: 0;
-        padding: 0;
-        background: url('https://i.imgur.com/tWiNmVI.jpeg') no-repeat center center fixed;
-        background-size: cover;
-        font-family: 'Nunito', sans-serif;
+        padding: 20px;
+        min-height: 100vh;
+        background: radial-gradient(circle at 50% 20%, #2a1a2e 0%, #120914 60%, #0a0510 100%);
+        font-family: 'Cormorant Garamond', serif;
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
         position: relative;
     }
 
-    /* Velo suave rosado */
-    body::before {
-        content: "";
+    /* Estrellitas de fondo */
+    .stars {
         position: fixed;
-        top: 0;
-        left: 0;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 0;
+        pointer-events: none;
+    }
+    .stars span {
+        position: absolute;
+        width: 2px; height: 2px;
+        background: #f4d3e0;
+        border-radius: 50%;
+        opacity: 0.5;
+        animation: twinkle 3s infinite ease-in-out;
+    }
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.2; }
+        50% { opacity: 0.9; }
+    }
+
+    .container {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 30px;
+    }
+
+    /* PANTALLA 1: Corazón */
+    #pantalla-corazon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 1.5s ease;
+    }
+
+    h1.titulo {
+        font-family: 'Playfair Display', serif;
+        font-weight: 600;
+        color: #f4d3e0;
+        font-size: 1.6rem;
+        letter-spacing: 1px;
+        margin-bottom: 35px;
+        opacity: 0.9;
+    }
+
+    .heart-wrapper {
+        position: relative;
+        width: 180px;
+        height: 160px;
+        cursor: pointer;
+    }
+
+    .heart-outline, .heart-fill {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+    }
+
+    .heart-fill {
+        clip-path: inset(100% 0 0 0);
+        transition: clip-path 3.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .heart-fill.lleno {
+        clip-path: inset(0% 0 0 0);
+    }
+
+    .heart-shape {
         width: 100%;
         height: 100%;
-        background: rgba(255, 220, 240, 0.35);
-        backdrop-filter: blur(2px);
-        z-index: -1;
+        background: transparent;
     }
 
-    .card, .card-alt {
-        background: rgba(255, 255, 255, 0.75);
-        backdrop-filter: blur(8px);
-        padding: 30px 35px;
-        width: 90%;
-        max-width: 450px;
-        border-radius: 22px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        position: relative;
-        animation: fadeIn 1.2s ease;
+    .porcentaje {
+        margin-top: 25px;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.1rem;
+        color: #d8a7c0;
+        letter-spacing: 2px;
+        min-height: 1.4em;
+    }
+
+    .instruccion {
+        margin-top: 10px;
+        font-size: 1rem;
+        color: #9a7d8c;
+        font-style: italic;
+        letter-spacing: 1px;
+    }
+
+    /* PANTALLA 2: Carta */
+    #pantalla-carta {
+        display: none;
+        max-width: 600px;
+        width: 95%;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(244, 211, 224, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 18px;
+        padding: 35px 30px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        animation: fadeIn 1.5s ease;
     }
 
     .photo {
-        width: 110px;
-        height: 110px;
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
         object-fit: cover;
         display: block;
-        margin: 0 auto 15px auto;
-        box-shadow: 0 6px 15px rgba(255, 120, 160, 0.4);
-        border: 4px solid #ffb6d5;
+        margin: 0 auto 20px auto;
+        border: 3px solid #d8a7c0;
+        box-shadow: 0 0 25px rgba(216, 167, 192, 0.4);
     }
 
-    h1 {
+    h2.subtitulo {
         font-family: 'Playfair Display', serif;
-        font-size: 1.8rem;
-        text-align: center;
-        margin-bottom: 18px;
-        color: #c74f7b;
-        animation: slideDown 1.2s ease;
+        font-weight: 600;
+        font-size: 1.5rem;
+        color: #f4d3e0;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
     }
 
     #mensaje {
-        font-family: 'Merriweather', serif;
-        font-size: 1.02rem;
-        line-height: 1.6;
-        color: #444;
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: #e6d3dc;
         white-space: pre-line;
-        min-height: 260px;
-    }
-
-    @keyframes slideDown {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
+        text-align: left;
     }
 
     .buttons {
         display: flex;
         justify-content: center;
-        gap: 15px;
-        margin-top: 20px;
+        gap: 18px;
+        margin-top: 28px;
     }
 
     button {
-        padding: 10px 20px;
+        padding: 11px 26px;
         border: none;
-        border-radius: 12px;
+        border-radius: 30px;
+        font-family: 'Playfair Display', serif;
         font-size: 1rem;
         cursor: pointer;
         transition: 0.3s;
-        font-weight: 600;
+        letter-spacing: 1px;
     }
 
     .yes {
-        background: #ff8fb7;
-        color: white;
-        box-shadow: 0 4px 12px rgba(255, 120, 160, 0.4);
+        background: linear-gradient(135deg, #c97b9c, #9a4f72);
+        color: #fff;
+        box-shadow: 0 6px 18px rgba(201, 123, 156, 0.45);
     }
-
-    .yes:hover {
-        background: #ff77a6;
-    }
+    .yes:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(201, 123, 156, 0.6); }
 
     .no {
-        background: #e4d4ff;
-        color: #5a4a7a;
-        box-shadow: 0 4px 12px rgba(150, 120, 255, 0.3);
+        background: rgba(255,255,255,0.08);
+        color: #d8c2cf;
+        border: 1px solid rgba(216, 167, 192, 0.3);
     }
+    .no:hover { background: rgba(255,255,255,0.15); }
 
-    .no:hover {
-        background: #d7c6ff;
-    }
-
-    .card-alt {
+    /* PANTALLA 3: Respuesta */
+    #pantalla-final {
         display: none;
+        max-width: 420px;
         text-align: center;
+        animation: fadeIn 1.2s ease;
     }
-
-    .card-alt p {
-        font-family: 'Merriweather', serif;
-        font-size: 1.02rem;
-        line-height: 1.6;
+    #pantalla-final p {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        color: #f4d3e0;
         white-space: pre-line;
     }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 </style>
+</head>
+
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="container">
+
+    <!-- PANTALLA 1: Corazón con carga -->
+    <div id="pantalla-corazon">
+        <h1 class="titulo">Tengo algo que decirte...</h1>
+
+        <div class="heart-wrapper" id="heartWrapper">
+            <svg class="heart-outline" viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg">
+                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.6
+                c0,9.5,16,17.6,16,17.6s16-8.1,16-17.6C32,3.8,28.2,0,23.6,0z"
+                fill="none" stroke="#c97b9c" stroke-width="0.6"/>
+            </svg>
+            <svg class="heart-fill" id="heartFill" viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad" x1="0%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%" stop-color="#9a4f72"/>
+                        <stop offset="100%" stop-color="#f4a6c6"/>
+                    </linearGradient>
+                </defs>
+                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.6
+                c0,9.5,16,17.6,16,17.6s16-8.1,16-17.6C32,3.8,28.2,0,23.6,0z"
+                fill="url(#grad)"/>
+            </svg>
+        </div>
+
+        <div class="porcentaje" id="porcentaje">Toca el corazón</div>
+        <div class="instruccion">para descubrir el mensaje</div>
+    </div>
+
+    <!-- PANTALLA 2: Carta -->
+    <div id="pantalla-carta">
+        <img class="photo" src="https://i.imgur.com/d4Qaxn6.png" onerror="this.src='https://i.imgur.com/d4Qaxn6.png?'+Date.now()" referrerpolicy="no-referrer">
+        <h2 class="subtitulo">Quería decirte algo...</h2>
+        <p id="mensaje"></p>
+
+        <div class="buttons">
+            <button class="yes" onclick="mostrarFinal(true)">Sí</button>
+            <button class="no" onclick="mostrarFinal(false)">No</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 3: Final -->
+    <div id="pantalla-final">
+        <h2 class="subtitulo" id="finalTitulo"></h2>
+        <p id="finalMensaje"></p>
+    </div>
+
+</div>
 
 <script>
-    function mostrarMensajeAlternativo() {
-        document.querySelector(".card").style.display = "none";
-        document.querySelector(".card-alt").style.display = "block";
+    // Generar estrellas
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 60; i++) {
+        const s = document.createElement('span');
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        s.style.animationDelay = (Math.random() * 3) + 's';
+        s.style.width = s.style.height = (Math.random() * 2 + 1) + 'px';
+        starsContainer.appendChild(s);
     }
 
-    // Efecto máquina de escribir
-    document.addEventListener("DOMContentLoaded", function () {
-        const textoCompleto = `No sé en qué momento dejaste de ser solo alguien más,
-y empezaste a ser esa persona que quiero ver todos los días.
+    // Animación del corazón al hacer clic
+    const heartWrapper = document.getElementById('heartWrapper');
+    const heartFill = document.getElementById('heartFill');
+    const porcentaje = document.getElementById('porcentaje');
+    let activado = false;
 
-Tienes algo…
-no sé si es tu sonrisa, tu forma de mirar,
-o esa tranquilidad que transmites sin intentar.
+    heartWrapper.addEventListener('click', () => {
+        if (activado) return;
+        activado = true;
 
-Pero lo cierto es que llamas la atención sin buscarlo,
-y a mí me tienes pensando más de la cuenta.
+        document.querySelector('.instruccion').style.display = 'none';
+        heartFill.classList.add('lleno');
 
-No voy a disfrazarlo de amistad bonita,
-porque lo que me pasa contigo va un poco más allá.
+        let p = 0;
+        const interval = setInterval(() => {
+            p += 1;
+            if (p > 100) p = 100;
+            porcentaje.textContent = p + '%';
+            if (p === 100) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    document.getElementById('pantalla-corazon').style.display = 'none';
+                    document.getElementById('pantalla-carta').style.display = 'block';
+                    escribirMensaje();
+                }, 600);
+            }
+        }, 35); // ~3.5s total
+    });
 
-Me gusta cómo eres,
-me gusta hablar contigo,
-y sí… también me gustaría descubrir qué pasaría
-si dejo de guardarme lo que siento.
+    // Efecto máquina de escribir para la carta
+    function escribirMensaje() {
+        const textoCompleto = `No sé en qué momento empezaste a ser diferente…
 
-No te escribo esto para presionarte,
-solo para que sepas que alguien te está mirando diferente,
-con interés… con ganas…
-y con la intención clara de acercarse un poco más.`;
+pero ahora estás en esos pequeños espacios de mi día donde antes no había nadie.
+
+Hay algo en ti… no sé si es tu forma de mirar, tu sonrisa, o esa calma que transmites sin siquiera intentarlo.
+
+Pero lo cierto es que llamas mi atención sin hacer ruido… y te quedas en mi mente más de lo que debería.
+
+Intenté verlo como algo simple, como una bonita coincidencia, pero no… esto se siente distinto.
+
+Me gusta hablar contigo, me gusta cómo eres, y me gusta la idea de seguir descubriéndote, sin prisas… pero con intención.
+
+No te escribo esto para incomodarte, ni para ponerte presión…
+solo porque sentí que debía ser honesto:
+me estás empezando a gustar más de lo que planeaba.
+
+Y si en algún momento sientes algo parecido… me gustaría ser yo con quien decidas averiguarlo.`;
 
         const elemento = document.getElementById("mensaje");
         let i = 0;
-        const velocidad = 35;
+        const velocidad = 30;
 
         function escribir() {
             if (i <= textoCompleto.length) {
@@ -172,38 +336,35 @@ y con la intención clara de acercarse un poco más.`;
                 setTimeout(escribir, velocidad);
             }
         }
-
         escribir();
-    });
+    }
+
+    // Mostrar pantalla final según respuesta
+    function mostrarFinal(esSi) {
+        document.getElementById('pantalla-carta').style.display = 'none';
+        document.getElementById('pantalla-final').style.display = 'block';
+
+        const titulo = document.getElementById('finalTitulo');
+        const mensaje = document.getElementById('finalMensaje');
+
+        if (esSi) {
+            titulo.textContent = '🤍';
+            mensaje.textContent = `Gracias por leer hasta aquí.
+
+Me encantaría que esto fuera el inicio
+de algo bonito entre los dos.
+
+Hablamos pronto 💌`;
+        } else {
+            titulo.textContent = 'Está bien';
+            mensaje.textContent = `De todas formas, gracias por tomarte
+el tiempo de leer esto.
+
+Espero que sigamos llevándonos bien,
+sin que nada cambie entre nosotros.`;
+        }
+    }
 </script>
-
-</head>
-
-<body>
-
-    <!-- Tarjeta principal -->
-    <div class="card">
-        <img class="photo" src="https://i.imgur.com/7bpxoZu.png">
-
-       <h1>Quería decirte algo…</h1>
-
-        <p id="mensaje"></p>
-
-        <div class="buttons">
-            <!-- Botón SÍ ahora muestra la tarjeta alternativa -->
-            <button class="yes" onclick="mostrarMensajeAlternativo()">Sí</button>
-
-            <!-- Botón NO ahora muestra el mensaje del SÍ -->
-            <button class="no" onclick="alert('Gracias por querer continuar ❤️')">No</button>
-        </div>
-    </div>
-
-    <!-- Tarjeta alternativa -->
-    <div class="card-alt">
-        <h1>Solo quería decirte…</h1>
-        <p>Solo quería que supieras lo mucho que me importas  
-y te quiero confesar mis sentimientos.</p>
-    </div>
 
 </body>
 </html>
