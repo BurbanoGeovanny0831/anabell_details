@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una disculpa sincera</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           VARIABLES Y CONFIGURACIÓN BASE
+           ========================================= */
+        :root {
+            --bg-color: #030408;
+            --candle-glow: rgba(255, 150, 50, 0);
+            --text-color: #e0d8c3;
+            --letter-bg: #111111;
+            --accent-color: #d4af37;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Cormorant Garamond', serif;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* =========================================
+           FONDO ESTRELLADO
+           ========================================= */
+        #stars-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #ffffff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle linear infinite;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 5px #fff; }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        #glow-overlay {
+            position: absolute;
+            top: 15%; /* Alineado con la vela */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150vw;
+            height: 150vh;
+            background: radial-gradient(circle, var(--candle-glow) 0%, transparent 60%);
+            z-index: 2;
+            pointer-events: none;
+            transition: background 3s ease-in-out;
+        }
+
+        /* =========================================
+           PANTALLA DE INICIO
+           ========================================= */
+        #start-screen {
+            position: absolute;
+            z-index: 100;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: opacity 1.5s ease;
+        }
+
+        .btn {
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--text-color);
+            border: 1px solid var(--text-color);
+            padding: 12px 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn:hover {
+            background: var(--text-color);
+            color: #000;
+        }
+
+        /* =========================================
+           VELA REALISTA
+           ========================================= */
+        .candle-container {
+            position: absolute;
+            top: 8%; /* Posicionada arriba */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        .candle {
+            width: 45px;
+            height: 140px;
+            /* Gradiente complejo para simular cera 3D */
+            background: linear-gradient(
+                to right,
+                #9b8c75 0%,
+                #e8d8b7 20%,
+                #fff9ed 50%,
+                #d1c1a1 80%,
+                #8a7c66 100%
+            );
+            border-radius: 4px 4px 8px 8px;
+            position: relative;
+            box-shadow: 
+                inset 0 -15px 20px rgba(0,0,0,0.7),
+                inset 0 10px 10px rgba(255,200,100,0.2),
+                0 20px 20px rgba(0,0,0,0.8);
+        }
+
+        /* Cera derretida */
+        .candle::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -2px;
+            width: 15px; height: 35px;
+            background: #e8d8b7;
+            border-radius: 10px 0 10px 15px;
+            box-shadow: inset -2px -2px 5px rgba(0,0,0,0.1);
+        }
+
+        .wick {
+            width: 4px;
+            height: 14px;
+            background: linear-gradient(to bottom, #111, #444);
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .flame {
+            width: 18px;
+            height: 30px;
+            background: radial-gradient(ellipse at bottom, #ffffff 10%, #ffd700 40%, #ff8c00 80%, transparent 100%);
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -42px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 
+                0 0 20px 8px rgba(255, 165, 0, 0.7),
+                0 0 40px 15px rgba(255, 200, 0, 0.5),
+                0 0 60px 25px rgba(255, 69, 0, 0.3);
+            animation: flicker 0.12s infinite alternate;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(0.95) skewX(-2deg); opacity: 0.85; }
+            100% { transform: translateX(-50%) scale(1.05) skewX(2deg); opacity: 1; }
+        }
+
+        /* =========================================
+           SOBRE Y CARTA (LAYOUT MEJORADO)
+           ========================================= */
+        .envelope-container {
+            position: absolute;
+            bottom: 5%; /* Posicionado más abajo */
+            width: 90%;
+            max-width: 450px;
+            perspective: 1000px;
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 200px; /* Sobre más bajo para que no estorbe */
+            background: #1a1a1a;
+            border: 1px solid #333;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+            z-index: 6;
+        }
+
+        .envelope::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            border-bottom: 100px solid #222;
+            border-left: 225px solid transparent;
+            border-right: 225px solid transparent;
+            z-index: 8;
+        }
+
+        .flap {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            border-top: 110px solid #2a2a2a;
+            border-left: 225px solid transparent;
+            border-right: 225px solid transparent;
+            transform-origin: top;
+            transition: transform 2s ease-in-out, z-index 0s 1s;
+            z-index: 9;
+        }
+
+        .flap.open {
+            transform: rotateX(180deg);
+            z-index: 5;
+        }
+
+        /* DISEÑO DE LA CARTA CON SCROLL */
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            left: 3%;
+            width: 94%;
+            height: 180px;
+            background: var(--letter-bg);
+            border: 1px solid #333;
+            z-index: 7; /* Entre el fondo del sobre y el frente del sobre */
+            transition: all 2.5s ease-in-out;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.9);
+            overflow-y: hidden; /* Oculto al principio */
+            scroll-behavior: smooth;
+        }
+
+        /* Barra de scroll elegante */
+        .letter::-webkit-scrollbar {
+            width: 6px;
+        }
+        .letter::-webkit-scrollbar-track {
+            background: #111; 
+        }
+        .letter::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 10px;
+        }
+
+        .letter.emerged {
+            transform: translateY(-160px); /* Sube lo suficiente */
+            height: 65vh; /* Altura dinámica que no rompe la pantalla */
+            max-height: 550px;
+            overflow-y: auto; /* Permite deslizar si el texto es muy largo */
+            z-index: 10;
+        }
+
+        /* =========================================
+           CONTENIDO DE LA CARTA
+           ========================================= */
+        .profile-img {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            margin-bottom: 25px;
+            flex-shrink: 0;
+            opacity: 0;
+            transition: opacity 1.5s ease; /* Transición ajustada */
+        }
+
+        .profile-img.visible {
+            opacity: 1;
+        }
+
+        .text-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            transition: opacity 1.5s ease; /* Añadida transición suave al desaparecer */
+        }
+
+        .typewriter-text {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            text-align: center;
+            color: #d1cfc7;
+            white-space: pre-wrap; /* Respeta los saltos de línea */
+            margin-bottom: 30px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2rem;
+            background-color: var(--accent-color);
+            animation: blink 0.7s infinite;
+            vertical-align: text-bottom;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* =========================================
+           INTERACCIÓN (BOTONES Y RESPUESTA)
+           ========================================= */
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+
+        .actions.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .btn-action {
+            background: #181818;
+            border: 1px solid #444;
+            color: #ccc;
+            padding: 10px 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .btn-action:hover {
+            border-color: var(--accent-color);
+            color: var(--text-color);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            background: #222;
+        }
+
+        #final-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%;
+            text-align: center;
+            font-size: 1.15rem; 
+            line-height: 1.6;
+            font-style: italic;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 2s ease;
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 450px) {
+            .envelope::before, .flap { border-left-width: 50vw; border-right-width: 50vw; }
+            .letter.emerged { height: 70vh; }
+            .typewriter-text { font-size: 1.05rem; }
+            #final-message { font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Fondo de Estrellas -->
+    <div id="stars-container"></div>
+    <div id="glow-overlay"></div>
+
+    <!-- Pantalla inicial -->
+    <div id="start-screen">
+        <h2 style="font-weight: 300; font-size: 1.2rem; color: #aaa;">Tengo algo que decirte</h2>
+        <button class="btn" onclick="startExperience()">Abrir</button>
+    </div>
+
+    <!-- Vela -->
+    <div class="candle-container" id="candle-box">
+        <div class="candle">
+            <div class="wick"></div>
+            <div class="flame" id="flame"></div>
+        </div>
+    </div>
+
+    <!-- Sobre y Carta -->
+    <div class="envelope-container" id="envelope-box">
+        <div class="envelope">
+            <div class="flap" id="flap"></div>
+            <div class="letter" id="letter">
+                <!-- Imagen -->
+                <img src="https://i.imgur.com/br7DpOV.png" alt="Para ti" class="profile-img" id="profile-pic">
+                
+                <!-- Contenedor del texto para Scroll -->
+                <div class="text-wrapper">
+                    <div class="typewriter-text"><span id="text-container"></span><span class="cursor" id="cursor"></span></div>
+                    
+                    <!-- Botones -->
+                    <div class="actions" id="action-buttons">
+                        <button class="btn-action" onclick="handleResponse('yes')">Te disculpo</button>
+                        <button class="btn-action" onclick="handleResponse('no')">No te disculpo</button>
+                    </div>
+                </div>
+
+                <!-- Mensaje Final Oculto -->
+                <div id="final-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio de fondo opcional -->
+    <audio id="bg-music" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/01/26/audio_d0c6ff1bc8.mp3?filename=sad-piano-ambient-101784.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Generador de Fondo Estrellado
+        function generateStars() {
+            const container = document.getElementById('stars-container');
+            const starCount = 120;
+
+            for (let i = 0; i < starCount; i++) {
+                let star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                let size = Math.random() * 2 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.animationDuration = (Math.random() * 4 + 2) + 's';
+                star.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(star);
+            }
+        }
+
+        generateStars();
+
+        const messageLines = [
+            "He pensado mucho en lo que pasó. En las palabras que dije, en los silencios que dejé, y en cómo todo eso pudo haberte herido.",
+            "No quiero que este momento sea solo un 'lo siento' más.",
+            "Quiero que sepas que mi disculpa nace de la reflexión, de reconocer mis errores y de valorar lo que eres para mí, aunque parezca que no tengo sentimiento mi cariño, atención, afecto y amor aún están ahí por ti.",
+            "Siento mucho no poder expresarlos, no poder decirlos y al contrario lastimar, herir y decir cosas que no demuestran el verdadero sentimiento. Hay cosas que no puedo borrar, no puedo entender ¿cómo?, o superar.",
+            "No tengo la pretensión de borrar el dolor, pero sí el deseo sincero de construir algo mejor, de ser una mejor persona y evitar lastimarte, porque al final mis ojos aun te ven con amor, aunque todo lo que yo diga no contraste con lo que siento.",
+            "Quiero expresarme con más cuidado, más respeto y más verdad.",
+            "Si decides aceptarlo, prometo que esta luz no será solo un gesto bonito, sino el inicio de una versión más consciente de mí.",
+            "Perdóname, de corazón."
+        ];
+
+        let currentLine = 0;
+        let currentChar = 0;
+        const typingSpeed = 55; 
+        const lineDelay = 1100;
+
+        function startExperience() {
+            document.getElementById('start-screen').style.opacity = '0';
+            setTimeout(() => document.getElementById('start-screen').style.display = 'none', 1500);
+
+            const audio = document.getElementById('bg-music');
+            audio.volume = 0.3;
+            audio.play().catch(e => console.log("Audio bloqueado"));
+
+            const candleBox = document.getElementById('candle-box');
+            const flame = document.getElementById('flame');
+            const envelopeBox = document.getElementById('envelope-box');
+            const flap = document.getElementById('flap');
+            const letter = document.getElementById('letter');
+            const profilePic = document.getElementById('profile-pic');
+
+            setTimeout(() => { candleBox.style.opacity = '1'; }, 500); 
+            setTimeout(() => { 
+                flame.style.opacity = '1'; 
+                document.documentElement.style.setProperty('--candle-glow', 'rgba(255, 150, 50, 0.12)');
+            }, 2500); 
+            setTimeout(() => { envelopeBox.style.opacity = '1'; }, 4500); 
+            setTimeout(() => { flap.classList.add('open'); }, 6500); 
+            setTimeout(() => { letter.classList.add('emerged'); }, 8000); 
+            setTimeout(() => { profilePic.classList.add('visible'); }, 10000); 
+            setTimeout(() => { typeWriter(); }, 11500); 
+        }
+
+        function typeWriter() {
+            const container = document.getElementById('text-container');
+            const letterBox = document.getElementById('letter');
+
+            if (currentLine < messageLines.length) {
+                if (currentChar < messageLines[currentLine].length) {
+                    container.innerHTML += messageLines[currentLine].charAt(currentChar);
+                    currentChar++;
+                    letterBox.scrollTop = letterBox.scrollHeight;
+                    setTimeout(typeWriter, typingSpeed);
+                } else {
+                    container.innerHTML += '<br><br>';
+                    currentLine++;
+                    currentChar = 0;
+                    letterBox.scrollTop = letterBox.scrollHeight;
+                    setTimeout(typeWriter, lineDelay);
+                }
+            } else {
+                document.getElementById('cursor').style.display = 'none';
+                const actionBtn = document.getElementById('action-buttons');
+                actionBtn.classList.add('visible');
+                setTimeout(() => {
+                    letterBox.scrollTo({
+                        top: letterBox.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                }, 500);
+            }
+        }
+
+        // --- CORRECCIÓN EN LA FUNCIÓN DEL MENSAJE FINAL ---
+        function handleResponse(response) {
+            const letterBox = document.getElementById('letter');
+            const textWrapper = document.querySelector('.text-wrapper');
+            const profilePic = document.getElementById('profile-pic');
+            
+            // 1. Ocultar suavemente el contenido actual (foto, texto y botones)
+            profilePic.style.opacity = '0';
+            textWrapper.style.opacity = '0';
+            
+            // 2. Bloquear scroll y REGRESAR EL SCROLL AL INICIO suavemente
+            // Esto asegura que el centro del contenedor sea visible de nuevo
+            letterBox.style.overflow = 'hidden';
+            letterBox.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            const finalMsgElement = document.getElementById('final-message');
+
+            // Esperar a que el contenido anterior desaparezca (1.5s)
+            setTimeout(() => {
+                // 3. Removerlos del flujo visual para que no empujen el diseño
+                profilePic.style.display = 'none';
+                textWrapper.style.display = 'none';
+
+                // 4. Establecer el mensaje final
+                if (response === 'yes') {
+                    finalMsgElement.innerHTML = "Gracias por darme la oportunidad de sanar esto contigo.<br><br>Prometo cuidar más de tus emociones, de tu tiempo y de tu confianza. Que esta luz sea el inicio de algo más consciente y más bonito.";
+                    finalMsgElement.style.color = "var(--accent-color)";
+                } else {
+                    finalMsgElement.innerHTML = "Entiendo y respeto tu decisión, aunque duela.<br><br>No estás obligada a perdonarme, y tu sentir es válido. Solo espero que este gesto te recuerde que asumí mi responsabilidad.";
+                    finalMsgElement.style.color = "#aaaaaa";
+                }
+                
+                // Mostrar el mensaje final centrado
+                finalMsgElement.style.opacity = '1';
+                
+                // Apagar la vela como acto final
+                setTimeout(() => {
+                    document.getElementById('flame').style.opacity = '0';
+                    document.documentElement.style.setProperty('--candle-glow', 'rgba(0,0,0,0)');
+                }, 3500);
+
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
