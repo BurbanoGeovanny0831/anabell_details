@@ -8,3 +8,6 @@ https://BurbanoGeovanny0831.github.io/anabell_details/indexAnabell1.html
 
 ##  Mensaje disculpas
 https://burbanogeovanny0831.github.io/anabell_details/indexunadisculpapormierror.html
+
+##  Mensaje disculpas2.0
+https://burbanogeovanny0831.github.io/anabell_details/indexJuliana.html
