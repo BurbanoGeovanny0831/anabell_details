@@ -1,4 +1,4 @@
-# Un detalle para Anabell
+#PROYECTOS HTML
 
 ## Mensaje Principal
 https://BurbanoGeovanny0831.github.io/anabell_details/
@@ -19,4 +19,4 @@ https://BurbanoGeovanny0831.github.io/anabell_details/index3inseparables.html
 https://burbangeovanny0831.github.io/anabell_details/indexfriendscplt.html
 
 ## A mis amigas 2
-https://burbangeovanny0831.github.io/anabell_details/index_friends_gmn.html
+https://burbangeovanny0831.github.io/anabell_details/indexfriendsgmn.html
