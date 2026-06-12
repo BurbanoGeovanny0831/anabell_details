@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los 3 Inseparables</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* === VARIABLES Y RESET === */
+        :root {
+            --bg-color-1: #0f172a;
+            --bg-color-2: #1e112a;
+            --text-main: #f8fafc;
+            --text-muted: #cbd5e1;
+            --accent-glow: rgba(236, 72, 153, 0.5);
+            --card-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-color-1), var(--bg-color-2));
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* === FONDO DE ESTRELLAS === */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* === CONTENEDOR PRINCIPAL === */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* === PORTADA HERO === */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px var(--accent-glow);
+            background: linear-gradient(to right, #f8fafc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 30px var(--accent-glow);
+            transition: transform 0.5s ease;
+        }
+
+        .image-wrapper:hover {
+            transform: scale(1.02);
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.85);
+            transition: filter 0.5s ease;
+        }
+
+        .image-wrapper:hover img {
+            filter: brightness(1);
+        }
+
+        /* === SECCIÓN DE NOMBRES E INTERACCIÓN === */
+        .friends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            margin-bottom: 4rem;
+        }
+
+        .friend-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .friend-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .friend-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .friend-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: rgba(236, 72, 153, 0.3);
+        }
+
+        .friend-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #f8fafc;
+            transition: color 0.3s ease;
+        }
+
+        .friend-card:hover .friend-name {
+            color: #f472b6;
+        }
+
+        .friend-message {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            opacity: 0;
+            max-height: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        /* Clase activa para mostrar el mensaje */
+        .friend-card.active .friend-message,
+        .friend-card:hover .friend-message {
+            opacity: 1;
+            max-height: 200px;
+            transform: translateY(0);
+            margin-top: 1rem;
+        }
+
+        /* === FOOTER === */
+        .footer-message {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-style: italic;
+            color: #e2e8f0;
+            padding: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 800px;
+            animation: pulseText 3s infinite alternate;
+        }
+
+        /* === ANIMACIONES === */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseText {
+            from { text-shadow: 0 0 5px rgba(255, 255, 255, 0.2); }
+            to { text-shadow: 0 0 15px rgba(255, 255, 255, 0.6); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .image-wrapper { height: 250px; }
+            .friends-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Lienzo para las partículas/estrellas -->
+    <canvas id="starfield"></canvas>
+
+    <div class="container">
+        <!-- Portada -->
+        <header class="hero">
+            <h1>Los 3 Inseparables</h1>
+            <div class="image-wrapper">
+                <!-- REEMPLAZA "tu_imagen_ia.jpg" CON LA RUTA O NOMBRE DE TU FOTO REAL -->
+                <!-- Ejemplo: <img src="foto-grupo.jpg" alt="Los 3 inseparables"> -->
+                <img src="https://i.imgur.com/pZpTI3i.png" alt="Nuestra foto generada por IA">
+            </div>
+        </header>
+
+        <!-- Tarjetas Interactivas -->
+        <section class="friends-grid">
+            
+            <div class="friend-card" onclick="this.classList.toggle('active')">
+                <h2 class="friend-name">Geovanny</h2>
+                <div class="friend-message">
+                    "Siempre cuidando las espaldas del grupo. La distancia física no significa nada cuando la conexión y la lealtad que compartimos lo es absolutamente todo."
+                </div>
+            </div>
+
+            <div class="friend-card" onclick="this.classList.toggle('active')">
+                <h2 class="friend-name">Ivanna</h2>
+                <div class="friend-message">
+                    "Tu energía, cariño y forma de ser iluminan incluso en los días más grises. Gracias por estar siempre ahí, demostrando que la verdadera amistad está a un solo mensaje de distancia."
+                </div>
+            </div>
+
+            <div class="friend-card" onclick="this.classList.toggle('active')">
+                <h2 class="friend-name">Lilibeth</h2>
+                <div class="friend-message">
+                    "Por todas las risas, los consejos y los momentos compartidos. Eres una persona increíble, genuina y una pieza irremplazable en este trío."
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Mensaje Final -->
+        <footer class="footer-message">
+            "Aunque estemos lejos, siempre estamos conectados."
+        </footer>
+    </div>
+
+    <!-- SCRIPT DE INTERACTIVIDAD Y ESTRELLAS -->
+    <script>
+        // Sistema de partículas (Estrellas de fondo)
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedY = Math.random() * 0.5 + 0.1;
+                this.opacity = Math.random();
+            }
+            update() {
+                this.y -= this.speedY; // Movimiento lento hacia arriba
+                if (this.y < 0) {
+                    this.y = canvas.height;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initStars() {
+            stars = [];
+            for (let i = 0; i < 150; i++) {
+                stars.push(new Star());
+            }
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+            requestAnimationFrame(animateStars);
+        }
+
+        initStars();
+        animateStars();
+    </script>
+</body>
+</html>
