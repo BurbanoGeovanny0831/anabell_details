@@ -11,3 +11,6 @@ https://burbanogeovanny0831.github.io/anabell_details/indexunadisculpapormierror
 
 ##  Mensaje disculpas2.0
 https://burbanogeovanny0831.github.io/anabell_details/indexJuliana.html
+
+##  A mis amigas
+https://BurbanoGeovanny0831.github.io/anabell_details/index3inseparables.html
