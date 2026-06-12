@@ -16,7 +16,7 @@ https://burbanogeovanny0831.github.io/anabell_details/indexJuliana.html
 https://BurbanoGeovanny0831.github.io/anabell_details/index3inseparables.html
 
 ## A mis amigas 1
-https://burbangeovanny0831.github.io/anabell_details/index_friends_cplt.html
+https://burbangeovanny0831.github.io/anabell_details/indexfriendscplt.html
 
 ## A mis amigas 2
 https://burbangeovanny0831.github.io/anabell_details/index_friends_gmn.html
